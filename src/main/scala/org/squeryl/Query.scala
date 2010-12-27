@@ -46,6 +46,14 @@ trait Query[R] extends Iterable[R] with Queryable[R] {
     r
   }
 
+  def singleOption: Option[R] = {
+    val i = iterator
+    val r = if (i.hasNext) Some(i.next) else None
+    if (i.hasNext)
+      error("single called on query returning more than one row : \n" + statement)
+    r
+  }
+
 
   def distinct: Query[R]
 
